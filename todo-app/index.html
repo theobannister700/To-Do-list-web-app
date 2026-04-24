@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="container">
+    <h1>My To-Do List</h1>
+
+    <button id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+
+    <!-- CENTER INPUT AREA -->
+    <div class="center-input">
+        <input type="text" id="taskInput" placeholder="Enter a task">
+
+        <select id="category">
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Study">Study</option>
+        </select>
+
+        <button onclick="addTask()">Add</button>
+    </div>
+
+    <button onclick="clearAll()">Clear All</button>
+
+    <!-- CATEGORY SECTIONS -->
+    <div class="categories">
+
+        <h2>Work</h2>
+        <ul id="workList"></ul>
+
+        <h2>Personal</h2>
+        <ul id="personalList"></ul>
+
+        <h2>Study</h2>
+        <ul id="studyList"></ul>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
