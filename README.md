@@ -29,16 +29,9 @@ Drag-and-drop is implemented using the HTML5 Drag API
 
 🚀 Getting Started
 
-Clone the repository:
-
-git clone https://github.com/your-username/kanban-todo-app.git
-
-Open the project folder:
-
-cd kanban-todo-app
-Open index.html in your browser
-
-No build tools or dependencies required.
+ -Open the project folder:
+ -Open index.html in your browser
+ -(No build tools or dependencies required.)
 
 📁 Project Structure
 /kanban-todo-app
@@ -75,5 +68,5 @@ No build tools or dependencies required.
  -Vanilla JavaScript (ES6)
 
 📌 Notes
-All data is stored locally in your browser
-Clearing browser storage will remove all tasks
+ -All data is stored locally in your browser
+ -Clearing browser storage will remove all tasks
