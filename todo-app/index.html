@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+    <!-- TOP BAR -->
+   <div class="top-bar">
+    <!-- Left -->
+    <button id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+
+    <!-- Center -->
+    <h1>My To-Do List</h1>
+
+    <!-- Right -->
+    <div class="top-actions">
+        <button class="danger" onclick="clearAll()">Clear All</button>
+    </div>
+</div>
+
+<!-- Task input row -->
+<div class="task-bar">
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+
+    <select id="category">
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Study">Study</option>
+    </select>
+
+    <button onclick="addTask()">Add</button>
+</div>
+   
+    <!-- BOARD -->
+    <div class="board">
+
+        <div class="column">
+            <h2>Work</h2>
+            <ul id="workList" data-category="Work"></ul>
+        </div>
+
+        <div class="column">
+            <h2>Personal</h2>
+            <ul id="personalList" data-category="Personal"></ul>
+        </div>
+
+        <div class="column">
+            <h2>Study</h2>
+            <ul id="studyList" data-category="Study"></ul>
+        </div>
+
+    </div>
+
+</div>
+    <script src="script.js"></script>
+</body>
+</html>
