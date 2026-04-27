@@ -15,14 +15,7 @@ Tasks can be created, edited, dragged between columns, and persisted using local
  -💾 Persistent storage using localStorage
  -🧠 How It Works
 
-Tasks are stored as objects:
-
-{
-  text: "Task name",
-  category: "Work",
-  completed: false,
-  createdAt: 123456789
-}
+Tasks are stored as objects
 Data is saved in the browser using localStorage
 UI updates dynamically using DOM manipulation
 Drag-and-drop is implemented using the HTML5 Drag API
