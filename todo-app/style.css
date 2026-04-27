@@ -20,6 +20,20 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
+@media (max-width: 600px) {
+    .board {
+        flex-direction: column;
+    }
+
+    .task-bar {
+        flex-wrap: wrap;
+    }
+
+    .task-bar input {
+        min-width: 0;
+    }
+}
+
 /* =========================
    2. TOP BAR
 ========================= */
@@ -186,6 +200,11 @@ li span {
     word-break: break-word;
 }
 
+li span:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 4px;
+}
+
 /* =========================
    8. ACTION BUTTONS
 ========================= */
@@ -337,4 +356,13 @@ li span {
 .dark .placeholder {
     background: #444;
     border-color: #888;
+}
+
+.dark #confirmModal > div {
+    background: #1e1e1e;
+    color: white;
+}
+
+.dark #confirmModal p {
+    color: white;
 }

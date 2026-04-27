@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='1em' font-size='14'>✅</text></svg>">
     <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,14 +13,14 @@
     <!-- TOP BAR -->
    <div class="top-bar">
     <!-- Left -->
-    <button id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button id="themeToggle">🌙 Dark Mode</button>
 
     <!-- Center -->
-    <h1>My To-Do List</h1>
+    <h1>My Task List</h1>
 
     <!-- Right -->
     <div class="top-actions">
-        <button class="danger" onclick="clearAll()">Clear All</button>
+        <button class="danger" id="clearAllBtn">Clear All</button>
     </div>
 </div>
 
@@ -32,7 +34,7 @@
         <option value="Study">Study</option>
     </select>
 
-    <button onclick="addTask()">Add</button>
+    <button id="addBtn">Add</button>
 </div>
    
     <!-- BOARD -->
@@ -56,6 +58,25 @@
     </div>
 
 </div>
-    <script src="script.js"></script>
+
+<script src="script.js"></script>
+
+<div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:24px; max-width:320px; width:90%; text-align:center;">
+        <p style="margin:0 0 16px; font-size:15px; color:#333;">Clear all tasks? This can't be undone.</p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button class="danger" id="confirmYes" style="background:#e53935;">Clear All</button>
+            <button id="confirmNo" style="background:#888;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="duplicateModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:24px; max-width:320px; width:90%; text-align:center; position:relative;">
+        <button id="duplicateClose" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:20px; cursor:pointer; color:#999;">❌</button>
+        <p style="margin:0 0 16px; font-size:15px; color:#333;">Task already exists in this category.</p>
+    </div>
+</div>
+
 </body>
 </html>

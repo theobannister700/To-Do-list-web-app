@@ -21,32 +21,35 @@ function setupDragAndDrop() {
         });
 
         list.addEventListener("drop", (e) => {
-            e.preventDefault();
-            list.classList.remove("drag-over");
+    e.preventDefault();
+    list.classList.remove("drag-over");
 
-            if (draggedIndex === null) return;
+    if (draggedIndex === null) return;
 
-            const newCategory = list.dataset.category;
-            const draggedTask = tasks[draggedIndex];
+    const newCategory = list.dataset.category;
+    const draggedTask = tasks[draggedIndex];
 
-            if (!newCategory) return;
+    if (!newCategory) return;
 
-            draggedTask.category = newCategory;
+    draggedTask.category = newCategory;
 
-            // Reorder if placeholder is in this list
-            if (placeholder.parentNode === list) {
-                const items = [...list.children];
-                const newIndex = items.indexOf(placeholder);
+    if (placeholder.parentNode === list) {
+        // Filter out the placeholder before computing index
+        const items = [...list.children].filter(el => el !== placeholder);
+        const newIndex = items.indexOf(
+            placeholder.nextElementSibling ?? items[items.length - 1]
+        );
 
-                tasks.splice(draggedIndex, 1);
-                tasks.splice(newIndex, 0, draggedTask);
-            }
+        tasks.splice(draggedIndex, 1);
+        const insertAt = newIndex === -1 ? tasks.length : newIndex;
+        tasks.splice(insertAt, 0, draggedTask);
+    }
 
-            saveTasks();
-            renderTasks();
-            draggedIndex = null;
-        });
+    saveTasks();
+    renderTasks();
+    draggedIndex = null;
     });
+});
 }
 
 /* =========================
@@ -67,12 +70,22 @@ function saveTasks() {
    ADD TASK
 ========================= */
 
+
 function addTask() {
     const input = document.getElementById("taskInput");
     const category = document.getElementById("category").value;
 
     const text = input.value.trim();
     if (!text) return;
+
+    // Prevent duplicate tasks (same text and category)
+    const isDuplicate = tasks.some(
+        t => t.text === text && t.category === category
+    );
+    if (isDuplicate) {
+        showDuplicateModal();
+        return;
+    }
 
     tasks.push({
         text,
@@ -91,6 +104,9 @@ function addTask() {
 ========================= */
 
 function renderTasks() {
+   
+    //cleanup 
+    document.querySelectorAll(".drag-ghost").forEach(g => g.remove());
     const workList = document.getElementById("workList");
     const personalList = document.getElementById("personalList");
     const studyList = document.getElementById("studyList");
@@ -105,8 +121,17 @@ function renderTasks() {
         /* ===== TASK TEXT ===== */
         const span = document.createElement("span");
         span.textContent = task.text;
+        span.setAttribute("role", "checkbox");
+        span.setAttribute("aria-checked", task.completed ? "true" : "false");
+        span.setAttribute("tabindex", "0");
         span.onclick = () => toggleTask(index);
 
+        span.addEventListener("keydown", (e) => {
+            if (e.key === " " || e.key === "Enter") {
+                e.preventDefault();
+                toggleTask(index);
+            }
+        });
         if (task.completed) span.classList.add("completed");
 
         /* ===== ACTION BUTTONS ===== */
@@ -164,12 +189,12 @@ function renderTasks() {
         li.addEventListener("dragend", () => {
             li.classList.remove("dragging");
 
-            if (li._ghost) {
-                li._ghost.remove();
-                li._ghost = null;
+            if (li._ghost && li._ghost.parentNode) {
+                 li._ghost.remove();
             }
+            li._ghost = null;
 
-            if (placeholder.parentNode) {
+              if (placeholder.parentNode) {
                 placeholder.remove();
             }
         });
@@ -188,6 +213,8 @@ function renderTasks() {
         });
     });
 }
+
+
 
 /* =========================
    EDIT TASK
@@ -245,10 +272,56 @@ function deleteTask(index) {
 }
 
 function clearAll() {
-    tasks = [];
-    saveTasks();
-    renderTasks();
+    const modal = document.getElementById("confirmModal");
+    modal.style.display = "flex";
+
+    document.getElementById("confirmYes").onclick = () => {
+        tasks = [];
+        saveTasks();
+        renderTasks();
+        modal.style.display = "none";
+    };
+
+    document.getElementById("confirmNo").onclick = () => {
+        modal.style.display = "none";
+    };
 }
+
+/* =========================
+   DUPLICATE MODAL
+========================= */
+
+function showDuplicateModal() {
+    const modal = document.getElementById("duplicateModal");
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+function closeDuplicateModal() {
+    const modal = document.getElementById("duplicateModal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Close modal when clicking the background
+document.addEventListener("DOMContentLoaded", function() {
+    const duplicateModal = document.getElementById("duplicateModal");
+    const duplicateCloseBtn = document.getElementById("duplicateClose");
+    
+    if (duplicateModal) {
+        duplicateModal.addEventListener("click", function(e) {
+            if (e.target === this) {
+                closeDuplicateModal();
+            }
+        });
+    }
+    
+    if (duplicateCloseBtn) {
+        duplicateCloseBtn.addEventListener("click", closeDuplicateModal);
+    }
+});
 
 /* =========================
    THEME
@@ -259,17 +332,24 @@ function toggleTheme() {
 
     const isDark = document.body.classList.contains("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
+
+ //Update button to reflect current theme
+    const btn = document.getElementById("themeToggle");
+    btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
 }
 
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark") {
     document.body.classList.add("dark");
+    document.getElementById("themeToggle").textContent = "☀️ Light Mode";
 }
 
 /* =========================
    ENTER KEY
 ========================= */
-
+document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+document.getElementById("clearAllBtn").addEventListener("click", clearAll);
+document.getElementById("addBtn").addEventListener("click", addTask);
 document.getElementById("taskInput").addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         e.preventDefault();
